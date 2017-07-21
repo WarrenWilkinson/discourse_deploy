@@ -4,9 +4,9 @@
   "author": "meldsza",
   "summary": "Installs discourse docker on a system",
   "license": "MIT",
-  "source": "https://github.com/meldsza/discourse-deploy",
-  "project_page": "https://github.com/meldsza/discourse-deploy",
-  "issues_url": "https://github.com/meldsza/discourse-deploy/issues",
+  "source": "https://github.com/meldsza/discourse_deploy",
+  "project_page": "https://github.com/meldsza/discourse_deploy",
+  "issues_url": "https://github.com/meldsza/discourse_deploy/issues",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
