@@ -1,6 +1,6 @@
 {
   "name": "meldsza-discourse_deploy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "meldsza",
   "summary": "Installs discourse docker on a system",
   "license": "MIT",
