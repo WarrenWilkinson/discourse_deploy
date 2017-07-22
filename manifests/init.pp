@@ -89,7 +89,7 @@ class discourse_deploy (
       String $domain = '',
       String $smtp_address = '',
       String $smtp_username = '',
-      Integer $smtp_port = 587, 
+      Integer $smtp_port = 587,
       String $smtp_password = '',
       Boolean $smtp_tls  = true ,
       Array $after_install =[],
