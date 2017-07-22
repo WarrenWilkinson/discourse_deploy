@@ -1,0 +1,13 @@
+language: ruby
+script: "rake spec"
+branches:
+  only:
+    - master
+env:
+  - PUPPET_VERSION=4.0.0
+  - PUPPET_VERSION=4.1.0
+  - PUPPET_VERSION=4.2.0
+  - PUPPET_VERSION=5.0.0
+notifications:
+  email: false
+gemfile: .gemfile
