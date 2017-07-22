@@ -96,6 +96,8 @@ class discourse_deploy (
       Array $plugins = [],
       $sidekiqs = false
       ){
+  include stdlib
+  include vcsrepo
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
   package{ 'docker':
