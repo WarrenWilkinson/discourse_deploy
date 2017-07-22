@@ -96,6 +96,7 @@ class discourse_deploy (
       Array $plugins = [],
       $sidekiqs = false
       ){
+  include git
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
   package{ 'docker':

@@ -1,6 +1,6 @@
 {
   "name": "meldsza-discourse_deploy",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "meldsza",
   "summary": "Installs discourse docker on a system",
   "license": "MIT",
@@ -14,6 +14,10 @@
     },
     {
       "name": "puppetlabs-vcsrepo",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    },
+    {
+      "name": "puppetlabs-git",
       "version_requirement": ">= 1.0.0 < 2.0.0"
     }
   ],
