@@ -16,3 +16,4 @@ else
   # rubocop requires ruby >= 1.9
   gem 'rubocop'
 end
+task :default => [:spec, :lint]
