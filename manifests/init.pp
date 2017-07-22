@@ -81,45 +81,48 @@
 class discourse_deploy (
       String $type = 'standalone',
       String $postgres_socket = '',
-      String $postgres_username ='', 
+      String $postgres_username ='',
       String $postgres_password ='',
-      String $postgres_host ='', 
-      String $redis_host = '', 
-      String $dev_emails = '' , 
-      String $domain = '', 
-      String $smtp_address = '', 
+      String $postgres_host ='',
+      String $redis_host = '',
+      String $dev_emails = '' ,
+      String $domain = '',
+      String $smtp_address = '',
       String $smtp_username = '',
       Integer $smtp_port = 587, 
       String $smtp_password = '',
       Boolean $smtp_tls  = true ,
-      Array $after_install =[], 
+      Array $after_install =[],
       Array $plugins = [],
       $sidekiqs = false
       ){
-  include stdlib
-  include vcsrepo
+  include git
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
   package{ 'docker':
-    ensure => 'present'
+    ensure => present
   }
   service{ 'docker':
-    ensure => 'running',
+    ensure => running,
     enable => true
   }
   ->vcsrepo{ '/var/discourse/':
-    ensure   => 'present',
-    provider => 'git',
+    ensure   => present,
+    provider => git,
     source   => 'https://github.com/discourse/discourse_docker.git'
   }
   ->file{ '/var/discourse/containers/app.yml':
     ensure => 'file',
     source => epp("discourse_deploy/templates/${type}.epp")
   }
-  ->exec { './launcher bootstrap app':
-    cwd     => '/var/discourse/'
+  exec { 'build':
+    command   => './launcher bootstrap app',
+    cwd       => '/var/discourse/',
+    subscribe => File('/var/discourse/containers/app.yml')
   }
-  ->exec { './launcher start app':
-    cwd     => '/var/discourse/'
+  exec { 'launch':
+    command   =>'./launcher start app',
+    cwd       => '/var/discourse/',
+    subscribe => Exec('build')
   }
 }

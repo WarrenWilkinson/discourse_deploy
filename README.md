@@ -31,4 +31,4 @@ This is limited to linux installations and Puppet v4 and above
 ## Release Notes/Contributors/Etc. 
 
 v0.1.0 - Created Module
-
+v0.1.3 - Fixed major bugs
