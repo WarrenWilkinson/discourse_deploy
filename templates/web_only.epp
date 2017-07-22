@@ -30,9 +30,9 @@ env:
   ## If you have lots of memory, use one or two workers per logical CPU core
   #UNICORN_WORKERS: 3
   
-  <% if $sidekiqs != false -%>
-    UNICORN_WORKERS: <%= $sidekiqs%>
-  <% end -%>
+  <% if $sidekiqs != false { -%>
+    UNICORN_WORKERS: <%= $sidekiqs %>
+  <% } -%>
 
   ## TODO: configure connectivity to the databases
   DISCOURSE_DB_SOCKET: <%= $postgres_socket %>
