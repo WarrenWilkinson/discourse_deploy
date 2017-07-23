@@ -52,7 +52,7 @@
 # Plugins to be installed (default: [])
 #
 # * `sidekiqs`
-# No. sidekiqs to be run (default: automatic)
+# No. sidekiqs to be run. Zero is considered as automatic(default: 0)
 #
 # Variables
 # ----------
@@ -94,7 +94,7 @@ class discourse_deploy (
       Boolean $smtp_tls  = true ,
       Array $after_install =[],
       Array $plugins = [],
-      $sidekiqs = false
+      Integer $sidekiqs = 0
       ){
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
@@ -115,15 +115,15 @@ class discourse_deploy (
     content => epp("discourse_deploy/${type}.epp")
   }
   exec { 'build':
-    command   => '/var/discourse/launcher bootstrap app',
-    cwd       => '/var/discourse/',
-    subscribe => File['/var/discourse/containers/app.yml'],
+    command     => '/var/discourse/launcher bootstrap app',
+    cwd         => '/var/discourse/',
+    subscribe   => File['/var/discourse/containers/app.yml'],
     refreshonly => true
   }
   exec { 'launch':
-    command   =>'/var/discourse/launcher start app',
-    cwd       => '/var/discourse/',
-    subscribe => Exec['build'],
+    command     =>'/var/discourse/launcher start app',
+    cwd         => '/var/discourse/',
+    subscribe   => Exec['build'],
     refreshonly => true
   }
 }
