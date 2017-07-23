@@ -30,7 +30,7 @@ env:
   ## If you have lots of memory, use one or two workers per logical CPU core
   #UNICORN_WORKERS: 3
   
-  <% if $sidekiqs != false { -%>
+  <% if $discourse_deploy::sidekiqs != false { -%>
     UNICORN_WORKERS: <%= $discourse_deploy::sidekiqs %>
   <% } -%>
 
