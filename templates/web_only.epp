@@ -31,35 +31,35 @@ env:
   #UNICORN_WORKERS: 3
   
   <% if $sidekiqs != false { -%>
-    UNICORN_WORKERS: <%= $sidekiqs %>
+    UNICORN_WORKERS: <%= $discourse_deploy::sidekiqs %>
   <% } -%>
 
   ## TODO: configure connectivity to the databases
-  DISCOURSE_DB_SOCKET: <%= $postgres_socket %>
-  DISCOURSE_DB_USERNAME:  <%= $postgres_username %>
-  DISCOURSE_DB_PASSWORD: <%= $postgres_password %>
-  DISCOURSE_DB_HOST: <%= $postgres_host %>
+  DISCOURSE_DB_SOCKET: <%= $discourse_deploy::postgres_socket %>
+  DISCOURSE_DB_USERNAME:  <%= $discourse_deploy::postgres_username %>
+  DISCOURSE_DB_PASSWORD: <%= $discourse_deploy::postgres_password %>
+  DISCOURSE_DB_HOST: <%= $discourse_deploy::postgres_host %>
 
-  DISCOURSE_REDIS_HOST: <%= $redis_host %>
+  DISCOURSE_REDIS_HOST: <%= $discourse_deploy::redis_host %>
 
   ##
   ## TODO: List of comma delimited emails that will be made admin and developer
   ## on initial signup example 'user1@example.com,user2@example.com'
-  DISCOURSE_DEVELOPER_EMAILS: '<%= $dev_emails %>'
+  DISCOURSE_DEVELOPER_EMAILS: '<%= $discourse_deploy::dev_emails %>'
   ##
   ## TODO: The domain name this Discourse instance will respond to
-  DISCOURSE_HOSTNAME: '<%= $domain %>'
+  DISCOURSE_HOSTNAME: '<%= $discourse_deploy::domain %>'
   ##
   ## Uncomment if you want the container to be started with the same
   ## hostname (-h option) as specified above (default "$hostname-$config")
   #DOCKER_USE_HOSTNAME: true
   ##
   ## TODO: The mailserver this Discourse instance will use
-  DISCOURSE_SMTP_ADDRESS: <%= $smtp_address %>
-  DISCOURSE_SMTP_PORT: <%= $smtp_port %>
-  DISCOURSE_SMTP_USER_NAME: <%= $smtp_username %>
-  DISCOURSE_SMTP_PASSWORD: <%= $smtp_password %>
-  DISCOURSE_SMTP_ENABLE_START_TLS: <%= $smtp_tls %>
+  DISCOURSE_SMTP_ADDRESS: <%= $discourse_deploy::smtp_address %>
+  DISCOURSE_SMTP_PORT: <%= $discourse_deploy::smtp_port %>
+  DISCOURSE_SMTP_USER_NAME: <%= $discourse_deploy::smtp_username %>
+  DISCOURSE_SMTP_PASSWORD: <%= $discourse_deploy::smtp_password %>
+  DISCOURSE_SMTP_ENABLE_START_TLS: <%= $discourse_deploy::smtp_tls %>
   ##
   ## The CDN address for this Discourse instance (configured to pull)
   #DISCOURSE_CDN_URL: //discourse-cdn.example.com
@@ -80,7 +80,7 @@ hooks:
         cd: $home/plugins
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
-          <% $plugins.each |$plugin|{ -%>
+          <% $discourse_deploy::plugins.each |$plugin|{ -%>
           - git clone <%= $plugin %>
           <% }-%>
 
@@ -96,7 +96,7 @@ run:
   ## If you want to authorized additional users, uncomment and change:
   #- exec: ssh-import-id username
   #- exec: ssh-import-id anotherusername
-  <% $after_install.each |$code|{ -%>
+  <% $discourse_deploy::after_install.each |$code|{ -%>
   - exec: <%= $code %>
   <% } -%>
   - exec: echo "End of custom commands"
