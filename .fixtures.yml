@@ -1,0 +1,5 @@
+fixtures:
+  repositories:
+    vcsrepo: "git://github.com/puppetlabs/puppetlabs-vcsrepo"
+    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib"
+    
