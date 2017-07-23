@@ -112,7 +112,7 @@ class discourse_deploy (
   }
   ->file{ '/var/discourse/containers/app.yml':
     ensure => 'file',
-    source => epp("discourse_deploy/templates/${type}.epp")
+    source => epp("discourse_deploy/${type}.epp")
   }
   exec { 'build':
     command   => './launcher bootstrap app',
