@@ -99,7 +99,7 @@ class discourse_deploy (
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
   exec{ 'docker install':
-    command => 'curl https://get.docker.com/ | sh'
+    command => 'curl https://get.docker.com/ | sh',
     unless => 'which docker'
   }->
   service{ 'docker':
