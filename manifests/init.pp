@@ -98,9 +98,10 @@ class discourse_deploy (
       ){
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
-  package{ 'docker':
-    ensure => present
-  }
+  exec{ 'docker install':
+    command => 'curl https://get.docker.com/ | sh'
+    unless => 'which docker'
+  }->
   service{ 'docker':
     ensure => running,
     enable => true
