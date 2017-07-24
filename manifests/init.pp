@@ -100,7 +100,8 @@ class discourse_deploy (
   validate_re($type, $allowed_types)
   exec{ 'docker install':
     command => 'curl https://get.docker.com/ | sh',
-    unless => 'which docker'
+    unless  => 'which docker',
+    path    => '/etc/'
   }->
   service{ 'docker':
     ensure => running,
