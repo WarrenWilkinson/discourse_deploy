@@ -31,7 +31,7 @@ env:
   #UNICORN_WORKERS: 3
   
   <% if $discourse_deploy::sidekiqs != 0 { -%>
-    UNICORN_WORKERS: <%= $discourse_deploy::sidekiqs %>
+  UNICORN_WORKERS: <%= $discourse_deploy::sidekiqs %>
   <% } -%>
 
   ## TODO: configure connectivity to the databases
