@@ -30,17 +30,17 @@ env:
   ## If you have lots of memory, use one or two workers per logical CPU core
   #UNICORN_WORKERS: 3
   
-  <% if $discourse_deploy::sidekiqs != 0 { -%>
+  <%- if $discourse_deploy::sidekiqs != 0 { -%>
   UNICORN_WORKERS: <%= $discourse_deploy::sidekiqs %>
-  <% } -%>
+  <%- } -%>
 
   ## TODO: configure connectivity to the databases
-  DISCOURSE_DB_SOCKET: <%= $discourse_deploy::postgres_socket %>
-  DISCOURSE_DB_USERNAME:  <%= $discourse_deploy::postgres_username %>
-  DISCOURSE_DB_PASSWORD: <%= $discourse_deploy::postgres_password %>
-  DISCOURSE_DB_HOST: <%= $discourse_deploy::postgres_host %>
+  DISCOURSE_DB_SOCKET: '<%= $discourse_deploy::postgres_socket %>'
+  DISCOURSE_DB_USERNAME:  '<%= $discourse_deploy::postgres_username %>'
+  DISCOURSE_DB_PASSWORD: '<%= $discourse_deploy::postgres_password %>'
+  DISCOURSE_DB_HOST: '<%= $discourse_deploy::postgres_host %>'
 
-  DISCOURSE_REDIS_HOST: <%= $discourse_deploy::redis_host %>
+  DISCOURSE_REDIS_HOST: '<%= $discourse_deploy::redis_host %>'
 
   ##
   ## TODO: List of comma delimited emails that will be made admin and developer
@@ -55,11 +55,11 @@ env:
   #DOCKER_USE_HOSTNAME: true
   ##
   ## TODO: The mailserver this Discourse instance will use
-  DISCOURSE_SMTP_ADDRESS: <%= $discourse_deploy::smtp_address %>
+  DISCOURSE_SMTP_ADDRESS: '<%= $discourse_deploy::smtp_address %>'
   DISCOURSE_SMTP_PORT: <%= $discourse_deploy::smtp_port %>
-  DISCOURSE_SMTP_USER_NAME: <%= $discourse_deploy::smtp_username %>
-  DISCOURSE_SMTP_PASSWORD: <%= $discourse_deploy::smtp_password %>
-  DISCOURSE_SMTP_ENABLE_START_TLS: <%= $discourse_deploy::smtp_tls %>
+  DISCOURSE_SMTP_USER_NAME: '<%= $discourse_deploy::smtp_username %>'
+  DISCOURSE_SMTP_PASSWORD: '<%= $discourse_deploy::smtp_password %>'
+  DISCOURSE_SMTP_ENABLE_START_TLS: '<%= $discourse_deploy::smtp_tls %>'
   ##
   ## The CDN address for this Discourse instance (configured to pull)
   #DISCOURSE_CDN_URL: //discourse-cdn.example.com
@@ -80,9 +80,9 @@ hooks:
         cd: $home/plugins
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
-          <% $discourse_deploy::plugins.each |$plugin|{ -%>
+          <%- $discourse_deploy::plugins.each |$plugin|{ -%>
           - git clone <%= $plugin %>
-          <% }-%>
+          <%- }-%>
 
 ## Remember, this is YAML syntax - you can only have one block with a name
 run:
@@ -96,8 +96,8 @@ run:
   ## If you want to authorized additional users, uncomment and change:
   #- exec: ssh-import-id username
   #- exec: ssh-import-id anotherusername
-  <% $discourse_deploy::after_install.each |$code|{ -%>
+  <%- $discourse_deploy::after_install.each |$code|{ -%>
   - exec: <%= $code %>
-  <% } -%>
+  <%- } -%>
   - exec: echo "End of custom commands"
   - exec: awk -F\# '{print $1;}' ~/.ssh/authorized_keys | awk 'BEGIN { print "Authorized SSH keys for this container:"; } NF>=2 {print $NF;}'

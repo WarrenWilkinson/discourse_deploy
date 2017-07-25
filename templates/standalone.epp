@@ -44,9 +44,9 @@ env:
   ## will be set automatically by bootstrap based on detected CPUs, or you can override
   #UNICORN_WORKERS: 3
 
-  <% if $discourse_deploy::sidekiqs != 0 {-%>
+  <%- if $discourse_deploy::sidekiqs != 0 {-%>
   UNICORN_WORKERS: <%= $discourse_deploy::sidekiqs%>
-  <% } -%>
+  <%- } -%>
   
   ## TODO: The domain name this Discourse instance will respond to
   DISCOURSE_HOSTNAME: '<%= $discourse_deploy::domain %>'
@@ -60,11 +60,11 @@ env:
   DISCOURSE_DEVELOPER_EMAILS: '<%= $discourse_deploy::dev_emails %>'
 
   ## TODO: The SMTP mail server used to validate new accounts and send notifications
-  DISCOURSE_SMTP_ADDRESS: <%= $discourse_deploy::smtp_address %>
-  DISCOURSE_SMTP_PORT: <%= $discourse_deploy::smtp_port %>
-  DISCOURSE_SMTP_USER_NAME: <%= $discourse_deploy::smtp_username %>
-  DISCOURSE_SMTP_PASSWORD: <%= $discourse_deploy::smtp_password %>
-  DISCOURSE_SMTP_ENABLE_START_TLS: <%= $discourse_deploy::smtp_tls %>
+  DISCOURSE_SMTP_ADDRESS: '<%= $discourse_deploy::smtp_address %>'
+  DISCOURSE_SMTP_PORT: '<%= $discourse_deploy::smtp_port %>'
+  DISCOURSE_SMTP_USER_NAME: '<%= $discourse_deploy::smtp_username %>'
+  DISCOURSE_SMTP_PASSWORD: '<%= $discourse_deploy::smtp_password %>'
+  DISCOURSE_SMTP_ENABLE_START_TLS: '<%= $discourse_deploy::smtp_tls %>'
 
   ## If you added the Lets Encrypt template, uncomment below to get a free SSL certificate
   #LETSENCRYPT_ACCOUNT_EMAIL: me@example.com
@@ -90,9 +90,9 @@ hooks:
         cd: $home/plugins
         cmd:
           - git clone https://github.com/discourse/docker_manager.git
-          <% $discourse_deploy::plugins.each |$plugin| {-%>
+          <%- $discourse_deploy::plugins.each |$plugin| {-%>
           - git clone <%= $plugin %>
-          <% }-%>
+          <%- }-%>
 
 ## Any custom commands to run after building
 run:
@@ -100,7 +100,7 @@ run:
   ## If you want to set the 'From' email address for your first registration, uncomment and change:
   ## After getting the first signup email, re-comment the line. It only needs to run once.
   #- exec: rails r "SiteSetting.notification_email='info$unconfigured.discourse.org'"
-  <% $discourse_deploy::after_install.each |$code| { -%>
+  <%- $discourse_deploy::after_install.each |$code| { -%>
   - exec: <%= $code %>
-  <% } -%>
+  <%- } -%>
   - exec: echo "End of custom commands"
