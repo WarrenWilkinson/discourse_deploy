@@ -122,15 +122,17 @@ class discourse_deploy (
     content => epp("discourse_deploy/${type}.epp")
   }
   exec { 'build':
-    command     => '/var/discourse/launcher bootstrap app',
+    command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
     subscribe   => File['/var/discourse/containers/app.yml'],
-    refreshonly => true
+    refreshonly => true,
+    path        => ['/usr/bin', '/usr/sbin']
   }
   exec { 'launch':
-    command     =>'/var/discourse/launcher start app',
+    command     =>'sudo /var/discourse/launcher start app',
     cwd         => '/var/discourse/',
     subscribe   => Exec['build'],
-    refreshonly => true
+    refreshonly => true,
+    path        => ['/usr/bin', '/usr/sbin']
   }
 }
