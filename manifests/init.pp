@@ -103,6 +103,11 @@ class discourse_deploy (
     creates => '/etc/docker',
     path    => ['/usr/bin', '/usr/sbin',],
   }->
+  exec { 'ln -s /usr/bin/docker /usr/bin/docker.io':
+    cwd     => '/var/tmp',
+    creates => '/usr/bin/docker.io',
+    path    => ['/usr/bin', '/usr/sbin',],
+  }->
   service{ 'docker':
     ensure => running,
     enable => true
