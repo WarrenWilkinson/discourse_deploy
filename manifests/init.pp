@@ -122,12 +122,17 @@ class discourse_deploy (
     ensure => 'file',
     content => epp("discourse_deploy/${type}.epp")
   }
-  exec { 'sudo service docker restart':
-    cwd       => '/var/tmp',
-    creates   => '/usr/bin/docker.io',
-    subscribe => File['/var/discourse/containers/app.yml'],
-    path      => ['/usr/bin', '/usr/sbin',],
+  ->
+  file{ '/etc/docker/daemon.json':
+    ensure => 'file',
+    content => epp("discourse_deploy/daemon.epp")
   }->
+  exec{'restart docker'
+    command => 'sudo service restart docker',
+    refreshonly => true,
+    path        => ['/usr/bin', '/usr/sbin']
+  }
+  ->
   exec { 'build':
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
