@@ -127,8 +127,8 @@ class discourse_deploy (
     ensure => 'file',
     content => epp("discourse_deploy/daemon.epp")
   }->
-  exec{'restart docker'
-    command => 'sudo service restart docker',
+  exec{'restart docker':
+    command     => 'sudo service restart docker',
     refreshonly => true,
     path        => ['/usr/bin', '/usr/sbin']
   }
