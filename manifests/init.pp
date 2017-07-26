@@ -130,6 +130,7 @@ class discourse_deploy (
   exec{'restart docker':
     command     => 'sudo service restart docker',
     refreshonly => true,
+    subscribe   => File['/etc/docker/daemon.json']
     path        => ['/usr/bin', '/usr/sbin']
   }
   ->
@@ -137,7 +138,7 @@ class discourse_deploy (
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
     refreshonly => true,
-    subscribe   => Exec['restart docker'],
+    subscribe   => File['/var/discourse/containers/app.yml'],
     path        => ['/usr/bin', '/usr/sbin']
   }
   exec { 'launch':
