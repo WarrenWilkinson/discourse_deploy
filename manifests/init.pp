@@ -124,7 +124,7 @@ class discourse_deploy (
     content => epp("discourse_deploy/daemon.epp")
   }->
   exec{'restart docker':
-    command     => 'sudo service restart docker',
+    command     => 'sudo service docker restart',
     refreshonly => true,
     subscribe   => File['/etc/docker/daemon.json'],
     path        => ['/usr/bin', '/usr/sbin']
