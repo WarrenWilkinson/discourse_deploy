@@ -132,6 +132,7 @@ class discourse_deploy (
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
     refreshonly => true,
+    subscribe   => Exec['sudo service docker restart'],
     path        => ['/usr/bin', '/usr/sbin']
   }
   exec { 'launch':
