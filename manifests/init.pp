@@ -96,6 +96,7 @@ class discourse_deploy (
       Array $plugins = [],
       Integer $sidekiqs = 0
       ){
+  include git
   $allowed_types = ['^standalone$','^web_only$']
   validate_re($type, $allowed_types)
   exec { 'curl https://get.docker.com/ | sh':
@@ -109,8 +110,9 @@ class discourse_deploy (
     path    => ['/usr/bin', '/usr/sbin',],
   }->
   service{ 'docker':
-    ensure => running,
-    enable => true
+    ensure   => running,
+    enable   => true,
+    provider => service
   }
   ->vcsrepo{ '/var/discourse/':
     ensure   => present,
