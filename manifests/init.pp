@@ -130,7 +130,7 @@ class discourse_deploy (
   exec{'restart docker':
     command     => 'sudo service restart docker',
     refreshonly => true,
-    subscribe   => File['/etc/docker/daemon.json']
+    subscribe   => File['/etc/docker/daemon.json'],
     path        => ['/usr/bin', '/usr/sbin']
   }
   ->
