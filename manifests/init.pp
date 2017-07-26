@@ -111,8 +111,7 @@ class discourse_deploy (
   }->
   service{ 'docker':
     ensure   => running,
-    enable   => true,
-    start    => 'sudo service docker start'
+    enable   => true
   }
   ->vcsrepo{ '/var/discourse/':
     ensure   => present,
@@ -123,10 +122,15 @@ class discourse_deploy (
     ensure => 'file',
     content => epp("discourse_deploy/${type}.epp")
   }
+  exec { 'sudo service docker restart':
+    cwd       => '/var/tmp',
+    creates   => '/usr/bin/docker.io',
+    subscribe => File['/var/discourse/containers/app.yml'],
+    path      => ['/usr/bin', '/usr/sbin',],
+  }->
   exec { 'build':
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
-    subscribe   => File['/var/discourse/containers/app.yml'],
     refreshonly => true,
     path        => ['/usr/bin', '/usr/sbin']
   }
