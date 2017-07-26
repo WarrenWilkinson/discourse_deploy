@@ -108,10 +108,6 @@ class discourse_deploy (
     cwd     => '/var/tmp',
     creates => '/usr/bin/docker.io',
     path    => ['/usr/bin', '/usr/sbin',],
-  }->
-  service{ 'docker':
-    ensure   => running,
-    enable   => true
   }
   ->vcsrepo{ '/var/discourse/':
     ensure   => present,
@@ -134,13 +130,17 @@ class discourse_deploy (
     path        => ['/usr/bin', '/usr/sbin']
   }
   ->
+  service{ 'docker':
+    ensure   => running,
+    enable   => true
+  }->
   exec { 'build':
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
     refreshonly => true,
     subscribe   => File['/var/discourse/containers/app.yml'],
     path        => ['/usr/bin', '/usr/sbin']
-  }
+  }->
   exec { 'launch':
     command     =>'sudo /var/discourse/launcher start app',
     cwd         => '/var/discourse/',
