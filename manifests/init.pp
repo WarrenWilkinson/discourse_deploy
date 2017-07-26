@@ -112,7 +112,7 @@ class discourse_deploy (
   service{ 'docker':
     ensure   => running,
     enable   => true,
-    provider => service
+    start    => 'sudo service docker start'
   }
   ->vcsrepo{ '/var/discourse/':
     ensure   => present,
