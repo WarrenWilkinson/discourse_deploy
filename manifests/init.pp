@@ -127,7 +127,7 @@ class discourse_deploy (
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
     refreshonly => true,
-    creates     => "/var/discourse/launcher/shared/{$type}",
+    creates     => "/var/discourse/launcher/shared/${type}",
     subscribe   => File['/var/discourse/containers/app.yml'],
     path        => ['/usr/bin', '/usr/sbin']
   }->
@@ -135,7 +135,7 @@ class discourse_deploy (
     command     => 'sudo /var/discourse/launcher rebuild app',
     cwd         => '/var/discourse/',
     refreshonly => true,
-    onlyif      => "test ! -f /var/discourse/launcher/shared/{$type}",
+    onlyif      => "test ! -f /var/discourse/launcher/shared/${type}",
     subscribe   => File['/var/discourse/containers/app.yml'],
     path        => ['/usr/bin', '/usr/sbin']
   }->
