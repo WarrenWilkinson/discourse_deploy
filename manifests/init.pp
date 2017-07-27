@@ -115,7 +115,7 @@ class discourse_deploy (
     source   => 'https://github.com/discourse/discourse_docker.git'
   }
   ->file{ '/var/discourse/containers/app.yml':
-    ensure => 'file',
+    ensure  => 'file',
     content => epp("discourse_deploy/${type}.epp")
   }
   ->
@@ -127,14 +127,27 @@ class discourse_deploy (
     command     => 'sudo /var/discourse/launcher bootstrap app',
     cwd         => '/var/discourse/',
     refreshonly => true,
+    creates     => "/var/discourse/launcher/shared/{$type}",
     subscribe   => File['/var/discourse/containers/app.yml'],
     path        => ['/usr/bin', '/usr/sbin']
   }->
+  exec { 'build2':
+    command     => 'sudo /var/discourse/launcher rebuild app',
+    cwd         => '/var/discourse/',
+    refreshonly => true,
+    onlyif      => "test ! -f /var/discourse/launcher/shared/{$type}",
+    subscribe   => File['/var/discourse/containers/app.yml'],
+    path        => ['/usr/bin', '/usr/sbin']
+  }->
+  
   exec { 'launch':
     command     =>'sudo /var/discourse/launcher start app',
     cwd         => '/var/discourse/',
-    subscribe   => Exec['build'],
     refreshonly => true,
+    subscribe   => [
+      Exec['build'],
+      Exec['build2']
+    ]
     path        => ['/usr/bin', '/usr/sbin']
   }
 }
