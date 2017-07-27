@@ -147,7 +147,7 @@ class discourse_deploy (
     subscribe   => [
       Exec['build'],
       Exec['build2']
-    ]
+    ],
     path        => ['/usr/bin', '/usr/sbin']
   }
 }
