@@ -37,3 +37,4 @@ v0.1.4 - Fixed web_only.pp
 ----------Stable-------------------
 v1.0.0 - Fixed major bugs. Made sidekiqs param as Integer
 v1.1.0 - Fix more bugs including the invalid app.yml
+v1.1.1 - emergency bug fix
