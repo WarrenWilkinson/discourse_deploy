@@ -54,6 +54,9 @@
 # * `sidekiqs`
 # No. sidekiqs to be run. Zero is considered as automatic(default: 0)
 #
+# * `manage`
+# should puppet manage the discourse installation by building and rebuilding (default: true)
+#
 # Variables
 # ----------
 #
@@ -94,7 +97,8 @@ class discourse_deploy (
       Boolean $smtp_tls  = true ,
       Array $after_install =[],
       Array $plugins = [],
-      Integer $sidekiqs = 0
+      Integer $sidekiqs = 0,
+      Boolean $manage  = true ,
       ){
   include git
   $allowed_types = ['^standalone$','^web_only$']
@@ -103,8 +107,8 @@ class discourse_deploy (
     cwd     => '/var/tmp',
     creates => '/etc/docker',
     path    => ['/usr/bin', '/usr/sbin',],
-  }->
-  exec { 'ln -s /usr/bin/docker /usr/bin/docker.io':
+  }
+  ->exec { 'ln -s /usr/bin/docker /usr/bin/docker.io':
     cwd     => '/var/tmp',
     creates => '/usr/bin/docker.io',
     path    => ['/usr/bin', '/usr/sbin',],
@@ -118,38 +122,27 @@ class discourse_deploy (
     ensure  => 'file',
     content => epp("discourse_deploy/${type}.epp")
   }
-  ->
-  service{ 'docker':
-    ensure   => running,
-    enable   => true
-  }->
-  exec { 'build':
-    command     => 'sudo /var/discourse/launcher bootstrap app',
+  ->service{ 'docker':
+    ensure => running,
+    enable => true
+  }
+  ->if $manage {
+    exec { 'build':
+      command     => 'sudo /var/discourse/launcher bootstrap app',
+      cwd         => '/var/discourse/',
+      refreshonly => true,
+      timeout     => 1800,
+      creates     => "/var/discourse/launcher/shared/${type}",
+      subscribe   => File['/var/discourse/containers/app.yml'],
+      unless      => 'sudo /var/discourse/launcher rebuild app',
+      path        => ['/usr/bin', '/usr/sbin']
+    }
+  }
+  ->exec { 'launch':
+    command     => 'sudo /var/discourse/launcher start app',
     cwd         => '/var/discourse/',
     refreshonly => true,
-    timeout     => 1800,
-    creates     => "/var/discourse/launcher/shared/${type}",
-    subscribe   => File['/var/discourse/containers/app.yml'],
-    path        => ['/usr/bin', '/usr/sbin']
-  }->
-  exec { 'build2':
-    command     => 'sudo /var/discourse/launcher rebuild app',
-    cwd         => '/var/discourse/',
-    refreshonly => true,
-    timeout     => 1800,
-    onlyif      => "test ! -f /var/discourse/launcher/shared/${type}",
-    subscribe   => File['/var/discourse/containers/app.yml'],
-    path        => ['/usr/bin', '/usr/sbin']
-  }->
-  
-  exec { 'launch':
-    command     =>'sudo /var/discourse/launcher start app',
-    cwd         => '/var/discourse/',
-    refreshonly => true,
-    subscribe   => [
-      Exec['build'],
-      Exec['build2']
-    ],
+    unless      => 'sudo /var/discourse/launcher status app',
     path        => ['/usr/bin', '/usr/sbin']
   }
 }
