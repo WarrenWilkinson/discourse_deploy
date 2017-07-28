@@ -70,7 +70,7 @@ env:
   DISCOURSE_SMTP_ENABLE_START_TLS: '<%= $discourse_deploy::smtp_tls %>'
 
   ## If you added the Lets Encrypt template, uncomment below to get a free SSL certificate
-  <%- if $discourse_deploy::letsencrypt ! =''{ -%>
+  <%- if $discourse_deploy::letsencrypt != ''{ -%>
   LETSENCRYPT_ACCOUNT_EMAIL: me@example.com
   <%- } -%>
   ## The CDN address for this Discourse instance (configured to pull)
