@@ -137,12 +137,12 @@ class discourse_deploy (
       unless      => 'sudo /var/discourse/launcher rebuild app',
       path        => ['/usr/bin', '/usr/sbin']
     }
-  }
-  ->exec { 'launch':
-    command     => 'sudo /var/discourse/launcher start app',
-    cwd         => '/var/discourse/',
-    refreshonly => true,
-    unless      => 'sudo /var/discourse/launcher status app',
-    path        => ['/usr/bin', '/usr/sbin']
+    ->exec { 'launch':
+      command     => 'sudo /var/discourse/launcher start app',
+      cwd         => '/var/discourse/',
+      refreshonly => true,
+      unless      => 'sudo /var/discourse/launcher status app',
+      path        => ['/usr/bin', '/usr/sbin']
+    }
   }
 }
