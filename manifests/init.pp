@@ -54,6 +54,9 @@
 # * `sidekiqs`
 # No. sidekiqs to be run. Zero is considered as automatic(default: 0)
 #
+# * `letsencrypt`
+# add letsencrypt ssl cert. '' means disable(default: ''). Note you need to manually add the letsencrypt template
+#
 # * `manage`
 # should puppet manage the discourse installation by building and rebuilding (default: true)
 #
@@ -99,6 +102,7 @@ class discourse_deploy (
       String $smtp_username = '',
       Integer $smtp_port = 587,
       String $smtp_password = '',
+      String $letsencrypt = '',
       Boolean $smtp_tls  = true ,
       Array $after_install =[],
       Array $plugins = [],
