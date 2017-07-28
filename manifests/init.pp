@@ -126,7 +126,7 @@ class discourse_deploy (
     ensure => running,
     enable => true
   }
-  ->if $manage {
+  if $manage {
     exec { 'build':
       command     => 'sudo /var/discourse/launcher bootstrap app',
       cwd         => '/var/discourse/',
