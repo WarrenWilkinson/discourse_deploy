@@ -57,6 +57,10 @@
 # * `manage`
 # should puppet manage the discourse installation by building and rebuilding (default: true)
 #
+# * `templates`
+# list of docker templates to add (default: []]).
+# eg: ["cloudflare"]
+#
 # Variables
 # ----------
 #
@@ -83,6 +87,7 @@
 #
 class discourse_deploy (
       String $type = 'standalone',
+      Array  $templates = [],
       String $postgres_socket = '',
       String $postgres_username ='',
       String $postgres_password ='',
