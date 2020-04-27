@@ -110,17 +110,7 @@ class discourse_deploy (
       Boolean $manage  = true ,
       ){
   include git
-  exec { 'curl https://get.docker.com/ | sh':
-    cwd     => '/var/tmp',
-    creates => '/etc/docker',
-    path    => ['/usr/bin', '/usr/sbin',],
-  }
-  ->exec { 'ln -s /usr/bin/docker /usr/bin/docker.io':
-    cwd     => '/var/tmp',
-    creates => '/usr/bin/docker.io',
-    path    => ['/usr/bin', '/usr/sbin',],
-  }
-  ->vcsrepo{ '/var/discourse/':
+  vcsrepo{ '/var/discourse/':
     ensure   => present,
     provider => git,
     source   => 'https://github.com/discourse/discourse_docker.git'
@@ -128,10 +118,6 @@ class discourse_deploy (
   ->file{ '/var/discourse/containers/app.yml':
     ensure  => 'file',
     content => epp("discourse_deploy/${type}.epp")
-  }
-  ->service{ 'docker':
-    ensure => running,
-    enable => true
   }
   if $manage {
     exec { 'build':
