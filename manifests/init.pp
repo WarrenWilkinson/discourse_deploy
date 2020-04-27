@@ -121,7 +121,7 @@ class discourse_deploy (
   }
   if $manage {
     exec { 'build':
-      command     => 'sudo /var/discourse/launcher bootstrap app',
+      command     => '/var/discourse/launcher bootstrap app',
       cwd         => '/var/discourse/',
       refreshonly => true,
       timeout     => 1800,
@@ -134,7 +134,7 @@ class discourse_deploy (
       command     => 'sudo /var/discourse/launcher start app',
       cwd         => '/var/discourse/',
       refreshonly => true,
-      unless      => 'sudo /var/discourse/launcher status app',
+      unless      => '/var/discourse/launcher status app',
       path        => ['/usr/bin', '/usr/sbin']
     }
   }
