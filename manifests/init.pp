@@ -89,7 +89,7 @@
 # Copyright 2017 Melroy Neil Dsouza
 #
 class discourse_deploy (
-      String $type = 'standalone',
+      Enum['standalone', 'web_only'] $type = 'standalone',
       Array  $templates = [],
       String $postgres_socket = '',
       String $postgres_username ='',
@@ -110,8 +110,6 @@ class discourse_deploy (
       Boolean $manage  = true ,
       ){
   include git
-  $allowed_types = ['^standalone$','^web_only$']
-  validate_re($type, $allowed_types)
   exec { 'curl https://get.docker.com/ | sh':
     cwd     => '/var/tmp',
     creates => '/etc/docker',
